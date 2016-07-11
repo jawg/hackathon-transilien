@@ -83,7 +83,7 @@ var Jawg = {};
    */
   if (document.getElementById("jawgmaps")) {
     init(mapConf);
-      activateFloors();
+    activateFloors();
   }
 
   /**
@@ -263,7 +263,7 @@ var Jawg = {};
     var stations;
     var timeOut;
     var floorsList;
-    var currentFloor = 0;
+    var currentFloor = null;
     var availableFloors;
     var floorsLayer;
     var floorLayerServer =  Jawg._conf.floorLayerServer;
@@ -344,6 +344,10 @@ var Jawg = {};
       if (currentFloor != floor) {
         currentFloor = floor;
         floorsLayer.setUrl(floorLayerServer.replace('{0}', currentFloor));
+        Jawg._filterParams.put("floor", currentFloor.toString());
+        if (Jawg.refreshMap) {
+          Jawg.refreshMap();
+        }
       }
     };
 
@@ -489,6 +493,14 @@ var Jawg = {};
       var northEast = L.latLng(boundingBox.getNorth() + deltaLat / 2, boundingBox.getEast() + deltaLng / 2);
       return L.latLngBounds(southWest, northEast);
     };
+
+    function refreshMap() {
+      var currentBoundingBox = Jawg.map.getBounds();
+      var option = {
+        box: enlarge(currentBoundingBox, Jawg._conf.poiLoadFactor)
+      };
+      getPois(option);
+    }
 
     /**
      * Get type associated to a given POI
@@ -684,6 +696,8 @@ var Jawg = {};
     Jawg.map.on('zoomend', function() {
       reloadPoisIfNeeded(true);
     });
+
+    Jawg.refreshMap = refreshMap;
   }
 
   //-------------------------------------------------//
