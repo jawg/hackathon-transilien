@@ -1,4 +1,4 @@
-##Jawgmaps Widgets
+##Jawg Widgets
 ===================
 
 OpenSource Javascript widgets for OpenStreetMap maps.  
@@ -8,12 +8,12 @@ It uses the latest User Experience guidelines and best practices, and does not r
 Configuration
 -------------
 
-This is a specific version of Jawgmaps Widgets preconfigured for Transilien.
+This is a specific version of Jawg Widgets preconfigured for Transilien.
 
 Dependencies
 -------------
 
-To be able to use Jawgmaps Widgets in your project, you need to import Leaflet.
+To be able to use Jawg Widgets in your project, you need to import Leaflet.
 
 ```
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css">
@@ -23,9 +23,9 @@ To be able to use Jawgmaps Widgets in your project, you need to import Leaflet.
 <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
 ```
 
-You can access the Leaflet map related to Jawgmaps Widgets, using the Jawgmaps object : 
+You can access the Leaflet map related to Jawg Widgets, using the Jawg object : 
 ```
-Jawgmaps.map
+Jawg.map
 ```
 
 
@@ -39,22 +39,22 @@ This map can be customize with widgets:
 Widgets are used to add more features on your map according to your needs.
 You can find 4 widgets : search, pois, pois-menu, refresh
 
-To enable the widgets, you need to call the activateWidgets function in the Jawgmaps object with one string array, containing the different widgets you wish to activate: 
+To enable the widgets, you need to call the activateWidgets function in the Jawg object with one string array, containing the different widgets you wish to activate: 
 
 ```
 Example : 
 
-Jawgmaps.activateWidgets(["refresh", "pois", "search", "pois-menu"]);
+Jawg.activateWidgets(["refresh", "pois", "search", "pois-menu"]);
 ```
 
-If needed, you can target another element, and change the map configuration, calling the method init in the Jawgmaps object with 2 arguments:
+If needed, you can target another element, and change the map configuration, calling the method init in the Jawg object with 2 arguments:
 >- A map configuration object
 >- The ID of the HTML element to inject the map into
 
 ```  
 Example : 
 
-Jawgmaps.init(myConf, "my_map_id");
+Jawg.init(myConf, "my_map_id");
 
 ```
  
@@ -86,13 +86,13 @@ Attributes :
 ===========
 Copyright (C) 2000-2016 eBusiness Information
  
- This file is part of Jawgmaps Widgets.
+ This file is part of Jawg Widgets.
  
- Jawgmaps Widgets is free software: you can redistribute it and/or modify it under the terms of the GNU  General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ Jawg Widgets is free software: you can redistribute it and/or modify it under the terms of the GNU  General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  
-Jawgmaps Widgets is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+Jawg Widgets is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without  even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  
-You should have received a copy of the GNU General Public License along with Jawgmaps Widgets.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with Jawg Widgets.  If not, see <http://www.gnu.org/licenses/>.
 
 **Contributors**
 ===========

@@ -1,20 +1,20 @@
 /**
  * Copyright (C) 2000-2016 eBusiness Information
  *
- * This file is part of Jawgmaps Widgets.
+ * This file is part of Jawg Widgets.
  *
- * Jawgmaps Widgets is free software: you can redistribute it and/or modify
+ * Jawg Widgets is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Jawgmaps Widgets is distributed in the hope that it will be useful,
+ * Jawg Widgets is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Jawgmaps Widgets.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Jawg Widgets.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -39,39 +39,39 @@ var mapConf = {
 
 
 /**
- * This is the Jawgmaps interface
+ * This is the Jawg interface
  *
- *  By default Jawgmaps will affect the DOM element with the id : "jawgmaps"
+ *  By default Jawg will affect the DOM element with the id : "jawgmaps"
  *  with a configuration by default.
  *
- *  You can specify a different configuration and element using Jawgmaps.init() method
+ *  You can specify a different configuration and element using Jawg.init() method
  *
- *  You can access directly the Leaflet map by : Jawgmaps.map
+ *  You can access directly the Leaflet map by : Jawg.map
  *
- *  You can activate different widget with the function : Jawgmaps.activateWidgets
+ *  You can activate different widget with the function : Jawg.activateWidgets
  *  Available widgets :
  *    "refresh" : A refresh button
  *    "pois" : Import POIs from transilien
  *    "search" : Search bar (for POI and itinerary)
  *    "pois-menu" : Display available POIs on a menu
- *  (Jawgmaps.activateWidgets(["refresh", "pois", "search", "pois-menu"]))
+ *  (Jawg.activateWidgets(["refresh", "pois", "search", "pois-menu"]))
  *
  */
-var Jawgmaps = {};
+var Jawg = {};
 
 (function() {
   "use strict";
 
-  Jawgmaps.init = init;
-  Jawgmaps.map = null;
-  Jawgmaps._filterParams = new Map();
-  Jawgmaps._utils = {
+  Jawg.init = init;
+  Jawg.map = null;
+  Jawg._filterParams = new Map();
+  Jawg._utils = {
     callHttpReq : callHttpReq,
     removeClass: removeClass,
     addClass: addClass
   };
 
-  Jawgmaps.activateWidgets = activateWidgets;
+  Jawg.activateWidgets = activateWidgets;
 
   var layerThemes = [];
   var currentLayerTheme = 0;
@@ -87,7 +87,7 @@ var Jawgmaps = {};
   }
 
   /**
-   * Initialize Jawgmaps to a specific DOM element with the given configuration
+   * Initialize Jawg to a specific DOM element with the given configuration
    * @param mapConfig Configuration of the map
    * @param mapId (default : 'jawgmaps') Id of the DOM element where the map should be insert
    */
@@ -98,7 +98,7 @@ var Jawgmaps = {};
     if (!mapConfig) {
       mapConfig = {};
     }
-    Jawgmaps._conf = mapConfig;
+    Jawg._conf = mapConfig;
 
     initMapConf(mapConfig);
 
@@ -174,7 +174,7 @@ var Jawgmaps = {};
    */
   function initMapDomNode(mapId) {
     var mapSample = document.getElementById(mapId);
-    Jawgmaps._rootElement = mapSample;
+    Jawg._rootElement = mapSample;
 
     var display = 'classic';
     var parentDisplay = getComputedStyle(mapSample.parentNode).display;
@@ -203,29 +203,29 @@ var Jawgmaps = {};
   function initLeafletMap(mapId) {
 
     // Add "maxBounds : mapConfig.mapBounds", on the options of map if you want to prohibit drawing the map outside the bounds.
-    Jawgmaps.map = L.map(mapId + '-map', {
-      maxZoom: Jawgmaps._conf.maxZoom,
-      minZoom: Jawgmaps._conf.minZoom,
+    Jawg.map = L.map(mapId + '-map', {
+      maxZoom: Jawg._conf.maxZoom,
+      minZoom: Jawg._conf.minZoom,
       zoomControl: false
     });
     var options = {
-      attribution: '<a href="http://openstreetmap.fr/" target="_blank">OpenStreetMap</a> | <a href="http://jawg.io/" target="_blank">Jawgmaps</a>',
-      maxZoom: Jawgmaps._conf.maxZoom,
-      maxNativeZoom: Jawgmaps._conf.maxZoom
+      attribution: '<a href="http://openstreetmap.fr/" target="_blank">OpenStreetMap</a> | <a href="http://jawg.io/" target="_blank">Jawg</a>',
+      maxZoom: Jawg._conf.maxZoom,
+      maxNativeZoom: Jawg._conf.maxZoom
     };
 
-    L.tileLayer(Jawgmaps._conf.tileServer, options).addTo(Jawgmaps.map);
+    L.tileLayer(Jawg._conf.tileServer, options).addTo(Jawg.map);
 
     var markerClusterGroup = new L.FeatureGroup();
-    Jawgmaps.map.markerGroup = markerClusterGroup;
-    Jawgmaps.map.addLayer(markerClusterGroup);
+    Jawg.map.markerGroup = markerClusterGroup;
+    Jawg.map.addLayer(markerClusterGroup);
 
-    new L.Control.Zoom({position: 'topright'}).addTo(Jawgmaps.map);
+    new L.Control.Zoom({position: 'topright'}).addTo(Jawg.map);
 
-    if (Jawgmaps._conf.fitBounds) {
-      Jawgmaps.map.fitBounds(Jawgmaps._conf.fitBounds);
+    if (Jawg._conf.fitBounds) {
+      Jawg.map.fitBounds(Jawg._conf.fitBounds);
     } else {
-      Jawgmaps.map.setView(Jawgmaps._conf.initialLocation, Jawgmaps._conf.initialZoom);
+      Jawg.map.setView(Jawg._conf.initialLocation, Jawg._conf.initialZoom);
     }
   }
 
@@ -236,7 +236,7 @@ var Jawgmaps = {};
    * Activate the refresh button
    */
   function activateRefreshButton() {
-    var mapSample = Jawgmaps._rootElement;
+    var mapSample = Jawg._rootElement;
 
     var refreshButton = document.createElement('div');
     refreshButton.className = 'map-refresh';
@@ -244,10 +244,10 @@ var Jawgmaps = {};
     mapSample.appendChild(refreshButton);
 
     refreshButton.addEventListener('click', function() {
-      if (Jawgmaps._conf.fitBounds) {
-        Jawgmaps.map.fitBounds(Jawgmaps._conf.fitBounds);
+      if (Jawg._conf.fitBounds) {
+        Jawg.map.fitBounds(Jawg._conf.fitBounds);
       } else {
-        Jawgmaps.map.setView(Jawgmaps._conf.initialLocation, Jawgmaps._conf.initialZoom);
+        Jawg.map.setView(Jawg._conf.initialLocation, Jawg._conf.initialZoom);
       }
     });
   }
@@ -266,14 +266,14 @@ var Jawgmaps = {};
     var currentFloor = 0;
     var availableFloors;
     var floorsLayer;
-    var floorLayerServer =  Jawgmaps._conf.floorLayerServer;
+    var floorLayerServer =  Jawg._conf.floorLayerServer;
     var selectedBtn = null;
     var floorsWrapper;
 
     var initWidget = function () {
       floorsWrapper = document.createElement('div');
       floorsWrapper.setAttribute('class', 'floors-wrapper');
-      Jawgmaps._rootElement.appendChild(floorsWrapper);
+      Jawg._rootElement.appendChild(floorsWrapper);
     };
 
     /**
@@ -314,7 +314,7 @@ var Jawgmaps = {};
         stations.forEach(function (station) {
           var stationBound = L.latLngBounds(L.latLng(station.south, station.west), L.latLng(station.north, station.east));
 
-          if (stationBound.intersects(Jawgmaps.map.getBounds())) {
+          if (stationBound.intersects(Jawg.map.getBounds())) {
             station.floors.forEach(function (floor) {
               newFloors.add(floor);
             });
@@ -331,7 +331,7 @@ var Jawgmaps = {};
       // if the current floor is not part of floors, switch to floor 0
       if (availableFloors.indexOf(currentFloor) == -1 ||
         //if the floors aren't display anymore switch to floor 0
-        (currentFloor !== 0 && Jawgmaps.map.currentZoom <= Jawgmaps._conf.displayFloorZoom)) {
+        (currentFloor !== 0 && Jawg.map.currentZoom <= Jawg._conf.displayFloorZoom)) {
         selectFloor(0);
       }
     }
@@ -352,17 +352,17 @@ var Jawgmaps = {};
      */
     var initFloors = function () {
       floorsLayer = L.tileLayer(floorLayerServer.replace('{0}', '0'), {
-        minZoom: Jawgmaps._conf.minZoom,
-        maxZoom: Jawgmaps._conf.maxZoom
+        minZoom: Jawg._conf.minZoom,
+        maxZoom: Jawg._conf.maxZoom
       });
       floorsLayer.setZIndex(4000);
-      floorsLayer.addTo(Jawgmaps.map);
+      floorsLayer.addTo(Jawg.map);
 
-      Jawgmaps.map.on('move', function () {
+      Jawg.map.on('move', function () {
         updateFloors();
       });
 
-      Jawgmaps.map.on('zoomend', function () {
+      Jawg.map.on('zoomend', function () {
         updateFloors();
       });
 
@@ -373,7 +373,7 @@ var Jawgmaps = {};
      * Depending on zoom, compute floors or hide all btns.
      */
     var updateFloors = function () {
-      if (Jawgmaps.map.getZoom() > Jawgmaps._conf.displayFloorZoom) {
+      if (Jawg.map.getZoom() > Jawg._conf.displayFloorZoom) {
         askForComputeFloors();
       } else {
         selectFloor(0);
@@ -424,7 +424,7 @@ var Jawgmaps = {};
      * Get Floor.json file containing all the BBox.
      */
     var callGetFloorsRequest = function () {
-      Jawgmaps._utils.callHttpReq('GET', "https://media.transilien.jawg.io/floors/floors.json")
+      Jawg._utils.callHttpReq('GET', "https://media.transilien.jawg.io/floors/floors.json")
         .success(function (response) {
           floorsReceived(response);
         });
@@ -496,8 +496,8 @@ var Jawgmaps = {};
      * @returns {*}
        */
     var getPoiType = function(point) {
-      for (var i = 0; i < Jawgmaps._conf.types.length; i++) {
-        var currentType = Jawgmaps._conf.types[i];
+      for (var i = 0; i < Jawg._conf.types.length; i++) {
+        var currentType = Jawg._conf.types[i];
         if (point.typeId === currentType.id) {
           return currentType;
         }
@@ -511,7 +511,7 @@ var Jawgmaps = {};
      */
     var filterParams = function() {
       var params = "";
-      Jawgmaps._filterParams.each(function(key, value) {
+      Jawg._filterParams.each(function(key, value) {
         if (value.length > 0) {
           params += '&' + key + '=' + value;
         }
@@ -538,16 +538,16 @@ var Jawgmaps = {};
             box.getNorth() + ")";
       }
 
-      params += "&zoom=" + Jawgmaps.map.getZoom();
+      params += "&zoom=" + Jawg.map.getZoom();
       params += filterParams();
 
       var header = {
-        'Api-Key': Jawgmaps._conf.apiKey
+        'Api-Key': Jawg._conf.apiKey
       };
-      return Jawgmaps._utils.callHttpReq('GET', Jawgmaps._conf.poiServer + '/' + Jawgmaps._conf.datasetId + '/poi' + params, header)
+      return Jawg._utils.callHttpReq('GET', Jawg._conf.poiServer + '/' + Jawg._conf.datasetId + '/poi' + params, header)
           .success(function(points) {
 
-            var diffPoints = Jawgmaps._conf.points.filter(function(p) {
+            var diffPoints = Jawg._conf.points.filter(function(p) {
               var i;
               for (i = 0; i < points.length; ++i) {
                 if (points[i].id === p.id) {
@@ -558,13 +558,13 @@ var Jawgmaps = {};
             });
 
             diffPoints.forEach(function(point) {
-              Jawgmaps.map.markerGroup.removeLayer(point.marker);
+              Jawg.map.markerGroup.removeLayer(point.marker);
             });
 
             var newPoints = points.filter(function(p) {
               var i;
-              for (i = 0; i < Jawgmaps._conf.points.length; ++i) {
-                if (Jawgmaps._conf.points[i].id === p.id) {
+              for (i = 0; i < Jawg._conf.points.length; ++i) {
+                if (Jawg._conf.points[i].id === p.id) {
                   return false;
                 }
               }
@@ -575,12 +575,12 @@ var Jawgmaps = {};
               point.latLngTable = [point.latLng.lat, point.latLng.lng];
               point.typeItem = getPoiType(point);
               point.typeItem.enable = true;
-              point.iconUrl = Jawgmaps._conf.poiServer + '/' + Jawgmaps._conf.datasetId + '/icon/' + point.typeItem.icon + '/' + point.typeItem.iconSize + '?apiKey=' + Jawgmaps._conf.apiKey;
+              point.iconUrl = Jawg._conf.poiServer + '/' + Jawg._conf.datasetId + '/icon/' + point.typeItem.icon + '/' + point.typeItem.iconSize + '?apiKey=' + Jawg._conf.apiKey;
 
               var currentMarker = null;
               var anchorX = point.typeItem.anchorX;
               var anchorY = point.typeItem.anchorY;
-              var popupAnchorX = -anchorX + ( Jawgmaps._conf.poiIconSizes[point.typeItem.iconSize][0] / 2 );
+              var popupAnchorX = -anchorX + ( Jawg._conf.poiIconSizes[point.typeItem.iconSize][0] / 2 );
               var popupAnchorY = -anchorY;
 
               var icon = L.icon({
@@ -592,10 +592,10 @@ var Jawgmaps = {};
 
               point.marker = currentMarker;
               point.enable = true;
-              Jawgmaps.map.markerGroup.addLayer(currentMarker);
+              Jawg.map.markerGroup.addLayer(currentMarker);
 
               var itemNameStr = '<h4>' + point.name + '</h4>';
-              if (!Jawgmaps._conf.clickMarker) {
+              if (!Jawg._conf.clickMarker) {
                 currentMarker.bindPopup(itemNameStr);
 
                 currentMarker.on('click', function() {
@@ -607,14 +607,14 @@ var Jawgmaps = {};
                 });
               }
             });
-            Jawgmaps._conf.points = Jawgmaps._conf.points.filter(function(i) {return diffPoints.indexOf(i) < 0;}).concat(newPoints);
+            Jawg._conf.points = Jawg._conf.points.filter(function(i) {return diffPoints.indexOf(i) < 0;}).concat(newPoints);
 
             if (flagMarkerMenu) {
               activateMarkerMenu();
             }
 
           }).error(function() {
-            Jawgmaps._conf.points = [];
+            Jawg._conf.points = [];
           });
     };
 
@@ -623,65 +623,65 @@ var Jawgmaps = {};
      * @param forceRefresh
      */
     var reloadPoisIfNeeded = function(forceRefresh) {
-      if (Jawgmaps._reloadTimer) {
-        window.clearTimeout(Jawgmaps._reloadTimer);
+      if (Jawg._reloadTimer) {
+        window.clearTimeout(Jawg._reloadTimer);
       }
-      Jawgmaps._reloadTimer = window.setTimeout(function() {
-        var currentBoundingBox = Jawgmaps.map.getBounds();
+      Jawg._reloadTimer = window.setTimeout(function() {
+        var currentBoundingBox = Jawg.map.getBounds();
         //if it's the first time
         var option;
-        if (!Jawgmaps._triggerBoundingBox) {
+        if (!Jawg._triggerBoundingBox) {
           option = {
-            box: enlarge(currentBoundingBox, Jawgmaps._conf.poiLoadFactor)
+            box: enlarge(currentBoundingBox, Jawg._conf.poiLoadFactor)
           };
-          Jawgmaps._triggerBoundingBox = enlarge(currentBoundingBox, Jawgmaps._conf.poiTriggerFactor);
+          Jawg._triggerBoundingBox = enlarge(currentBoundingBox, Jawg._conf.poiTriggerFactor);
           getPois(option);
           return;
         }
         //if we are out of the trigger Box
-        if (forceRefresh || shouldReload(currentBoundingBox, Jawgmaps._triggerBoundingBox)) {
+        if (forceRefresh || shouldReload(currentBoundingBox, Jawg._triggerBoundingBox)) {
           option = {
-            box: enlarge(currentBoundingBox, Jawgmaps._conf.poiLoadFactor)
+            box: enlarge(currentBoundingBox, Jawg._conf.poiLoadFactor)
           };
 
           //get pois
           getPois(option);
-          Jawgmaps._triggerBoundingBox = enlarge(currentBoundingBox, Jawgmaps._conf.poiTriggerFactor);
+          Jawg._triggerBoundingBox = enlarge(currentBoundingBox, Jawg._conf.poiTriggerFactor);
         }
       }, 300);
     };
 
 
-    if (Jawgmaps._conf.poiServer.length > 0) {
+    if (Jawg._conf.poiServer.length > 0) {
       var header = {
-        'Api-Key': Jawgmaps._conf.apiKey
+        'Api-Key': Jawg._conf.apiKey
       };
-      Jawgmaps._utils.callHttpReq('GET', Jawgmaps._conf.poiServer + '/' + Jawgmaps._conf.datasetId + '/type', header)
+      Jawg._utils.callHttpReq('GET', Jawg._conf.poiServer + '/' + Jawg._conf.datasetId + '/type', header)
         .success(function(types) {
-          Jawgmaps._conf.types = types;
+          Jawg._conf.types = types;
         }).error(function() {
-        Jawgmaps._conf.types = [];
+        Jawg._conf.types = [];
       }).then(function() {
         var option = {
-          box: enlarge(Jawgmaps.map.getBounds(), Jawgmaps._conf.poiLoadFactor)
+          box: enlarge(Jawg.map.getBounds(), Jawg._conf.poiLoadFactor)
         };
         getPois(option)
         .then(function() {
-          Jawgmaps._utils.callHttpReq('GET', Jawgmaps._conf.poiServer + '/' + Jawgmaps._conf.datasetId + '/layer/', header)
+          Jawg._utils.callHttpReq('GET', Jawg._conf.poiServer + '/' + Jawg._conf.datasetId + '/layer/', header)
             .success(function(layers) {
-              Jawgmaps._conf.layers = layers;
+              Jawg._conf.layers = layers;
             }).error(function() {
-            Jawgmaps._conf.layers = [];
+            Jawg._conf.layers = [];
           });
         });
       });
     }
 
-    Jawgmaps.map.on('move', function() {
+    Jawg.map.on('move', function() {
       reloadPoisIfNeeded(false);
     });
 
-    Jawgmaps.map.on('zoomend', function() {
+    Jawg.map.on('zoomend', function() {
       reloadPoisIfNeeded(true);
     });
   }
@@ -818,7 +818,7 @@ var Jawgmaps = {};
     var currentItiType = itiTypesId[0];
 
     var mainItem = templatesFunctions.getSearchWidget();
-    var mapContainerElem = Jawgmaps._rootElement.querySelector('.map-content');
+    var mapContainerElem = Jawg._rootElement.querySelector('.map-content');
     mapContainerElem.appendChild(mainItem);
 
     var containers = {
@@ -839,19 +839,19 @@ var Jawgmaps = {};
       }
     });
 
-    Jawgmaps._searchWidgetOpen = false;
-    Jawgmaps._toggleSearchWidgetOpen = function() {
-      Jawgmaps._searchWidgetOpen = !Jawgmaps._searchWidgetOpen;
+    Jawg._searchWidgetOpen = false;
+    Jawg._toggleSearchWidgetOpen = function() {
+      Jawg._searchWidgetOpen = !Jawg._searchWidgetOpen;
 
-      if(Jawgmaps._searchWidgetOpen) {
+      if(Jawg._searchWidgetOpen) {
         mainItem.className = 'search-widget search-widget-open';
 
-        if (Jawgmaps._markersWidgetOpen !== null && Jawgmaps._markersWidgetOpen !== undefined) {
-          Jawgmaps._markersWidgetOpen = true;
-          Jawgmaps._toggleMarkersWidgetOpen();
+        if (Jawg._markersWidgetOpen !== null && Jawg._markersWidgetOpen !== undefined) {
+          Jawg._markersWidgetOpen = true;
+          Jawg._toggleMarkersWidgetOpen();
         }
-        if (Jawgmaps._toggleLayerMenu && Jawgmaps._layerMenuOpened) {
-          Jawgmaps._toggleLayerMenu();
+        if (Jawg._toggleLayerMenu && Jawg._layerMenuOpened) {
+          Jawg._toggleLayerMenu();
         }
 
       } else {
@@ -861,7 +861,7 @@ var Jawgmaps = {};
 
     var reduceElem = mainItem.querySelector('.search-widget-reduce');
     reduceElem.addEventListener("click", function() {
-      Jawgmaps._toggleSearchWidgetOpen();
+      Jawg._toggleSearchWidgetOpen();
     });
 
     /*--------------------- Mapping of API data -----------------------*/
@@ -1075,12 +1075,12 @@ var Jawgmaps = {};
 
       var locations = [];
 
-      if(Jawgmaps._itinerary) {
-        Jawgmaps.map.removeLayer(Jawgmaps._itinerary);
+      if(Jawg._itinerary) {
+        Jawg.map.removeLayer(Jawg._itinerary);
       }
-      Jawgmaps._itinerary = L.polyline(routeGeometry, {color: 'blue'});
-      Jawgmaps.map.addLayer(Jawgmaps._itinerary);
-      Jawgmaps.map.fitBounds(Jawgmaps._itinerary.getBounds());
+      Jawg._itinerary = L.polyline(routeGeometry, {color: 'blue'});
+      Jawg.map.addLayer(Jawg._itinerary);
+      Jawg.map.fitBounds(Jawg._itinerary.getBounds());
 
       var routes = {
         'time' : 0,
@@ -1175,7 +1175,7 @@ var Jawgmaps = {};
         toStr = to[1] + ';' + to[0];
         var dateTime = navitiaDate(new Date());
 
-        Jawgmaps._utils.callHttpReq('GET',
+        Jawg._utils.callHttpReq('GET',
             'http://api.navitia.io/v1/journeys?from='+fromStr+'&to='+toStr+'&datetime='+dateTime,
           { 'Authorization' : '82b082ec-424c-4e84-ac51-3d499d575be1'})
           .success(navitiaJourneyView);
@@ -1186,7 +1186,7 @@ var Jawgmaps = {};
 
         var request = "http://router.project-osrm.org/viaroute?loc="+fromStr+"&loc="+toStr+"&instructions=true";
 
-        Jawgmaps._utils.callHttpReq('GET', request).success(function(data) {
+        Jawg._utils.callHttpReq('GET', request).success(function(data) {
           routeView(data, getOSRMData);
         });
 
@@ -1203,8 +1203,8 @@ var Jawgmaps = {};
       // Add the template in the view
       var notVisible = false;
       if (searchItem.internal) {
-        for (var i = 0; i < Jawgmaps._conf.points.length && !notVisible; i++) {
-          if (!Jawgmaps._conf.points[i].enable && Jawgmaps._conf.points[i].name === searchItem.name) {
+        for (var i = 0; i < Jawg._conf.points.length && !notVisible; i++) {
+          if (!Jawg._conf.points[i].enable && Jawg._conf.points[i].name === searchItem.name) {
             notVisible = true;
           }
         }
@@ -1230,18 +1230,18 @@ var Jawgmaps = {};
       }
 
       if(searchItem.bounds) {
-        Jawgmaps.map.fitBounds(searchItem.bounds);
+        Jawg.map.fitBounds(searchItem.bounds);
       } else {
-        Jawgmaps.map.setView(searchItem.latlng, Jawgmaps._conf.searchZoom);
+        Jawg.map.setView(searchItem.latlng, Jawg._conf.searchZoom);
       }
 
       if(searchMarker) {
-        Jawgmaps.map.removeLayer(searchMarker);
+        Jawg.map.removeLayer(searchMarker);
         searchMarker = null;
       }
       if(!searchItem.internal) {
         searchMarker = new L.marker(searchItem.latlng);
-        Jawgmaps.map.addLayer(searchMarker);
+        Jawg.map.addLayer(searchMarker);
       }
 
       currentSearchField.value = searchItem.name;
@@ -1272,19 +1272,19 @@ var Jawgmaps = {};
 
       focusBtn.addEventListener('click', function(){
         if(this.parentField.bounds) {
-          Jawgmaps.map.fitBounds(this.parentField.bounds);
+          Jawg.map.fitBounds(this.parentField.bounds);
         } else {
-          Jawgmaps.map.setView(this.parentField.latlng, Jawgmaps._searchZoom);
+          Jawg.map.setView(this.parentField.latlng, Jawg._searchZoom);
         }
 
         if(searchMarker) {
-          Jawgmaps.map.removeLayer(searchMarker);
+          Jawg.map.removeLayer(searchMarker);
           searchMarker = null;
         }
 
         if(!searchItem.internal) {
           searchMarker = new L.marker(this.parentField.latlng);
-          Jawgmaps.map.addLayer(searchMarker);
+          Jawg.map.addLayer(searchMarker);
         }
 
       });
@@ -1296,13 +1296,13 @@ var Jawgmaps = {};
         removeClass(delBtn, 'shown');
 
         if(searchMarker) {
-          Jawgmaps.map.removeLayer(searchMarker);
+          Jawg.map.removeLayer(searchMarker);
           searchMarker = null;
         }
 
-        if(Jawgmaps._itinerary) {
-          Jawgmaps.map.removeLayer(Jawgmaps._itinerary);
-          Jawgmaps._itinerary = null;
+        if(Jawg._itinerary) {
+          Jawg.map.removeLayer(Jawg._itinerary);
+          Jawg._itinerary = null;
         }
 
         if(locItem === this.parentField) {
@@ -1333,7 +1333,7 @@ var Jawgmaps = {};
       var endSearch = function() {
 
         // Filter and map points to be readable on the view
-        var pointsSearch = Jawgmaps._conf.points.filter(
+        var pointsSearch = Jawg._conf.points.filter(
           function(currentPoint){
             var name = '';
             if(currentPoint.name) {
@@ -1360,7 +1360,7 @@ var Jawgmaps = {};
 
       var callGouvRequest = function() {
         if(currentSearchField.value.length > 0) {
-          Jawgmaps._utils.callHttpReq('GET', 'http://api-adresse.data.gouv.fr/search/?q='+currentSearchField.value)
+          Jawg._utils.callHttpReq('GET', 'http://api-adresse.data.gouv.fr/search/?q='+currentSearchField.value)
             .success(function(gouvResult) {
               gouvSearch = gouvResult.features.map(mapGouv);
             }).then(endSearch);
@@ -1370,8 +1370,8 @@ var Jawgmaps = {};
       };
 
       if(currentSearchField) {
-        if(Jawgmaps._conf.osmSearch) {
-          photonRequest = Jawgmaps._utils.callHttpReq('GET', 'http://photon.komoot.de/api/?q='+currentSearchField.value)
+        if(Jawg._conf.osmSearch) {
+          photonRequest = Jawg._utils.callHttpReq('GET', 'http://photon.komoot.de/api/?q='+currentSearchField.value)
             .success(function(photonResult) {
               photonSearch = photonResult.features.map(mapPhoton);
             }).then(callGouvRequest);
@@ -1401,10 +1401,10 @@ var Jawgmaps = {};
 
     var launchSearchElem = mainItem.querySelector('.search-widget-button');
     launchSearchElem.addEventListener("click", function() {
-      if(Jawgmaps._searchWidgetOpen) {
+      if(Jawg._searchWidgetOpen) {
         showSearchResults(true);
       } else {
-        Jawgmaps._toggleSearchWidgetOpen();
+        Jawg._toggleSearchWidgetOpen();
       }
     });
 
@@ -1418,7 +1418,7 @@ var Jawgmaps = {};
     } );
 
 
-    Jawgmaps.map.on('click', function(){
+    Jawg.map.on('click', function(){
       containers.results.textContent = '';
     });
 
@@ -1508,18 +1508,18 @@ var Jawgmaps = {};
   //-------------------------------------------------//
   function activateMarkerMenu() {
 
-    if (Jawgmaps._conf.points.length === 0) {
+    if (Jawg._conf.points.length === 0) {
       flagMarkerMenu = true;
       return;
     }
 
-    var savedZoom = Jawgmaps.map.getZoom();
+    var savedZoom = Jawg.map.getZoom();
     var popup;
 
-    var position = Jawgmaps._conf.markerMenuPanelPosition;
+    var position = Jawg._conf.markerMenuPanelPosition;
     var poiPanel = document.createElement('div');
     var poiContent = document.createElement('div');
-    var map = Jawgmaps._rootElement.querySelector('.map-content');
+    var map = Jawg._rootElement.querySelector('.map-content');
 
     var selectedPoint = null;
     var mode = 'list';
@@ -1547,7 +1547,7 @@ var Jawgmaps = {};
       poiPanel.setAttribute('class', 'poi-widget-panel' + ' panel-' + position);
       poiContent.setAttribute('class', 'poi-widget-panel-content');
 
-      Jawgmaps._rootElement.appendChild(poiPanel);
+      Jawg._rootElement.appendChild(poiPanel);
 
       var showPanelBtn = document.createElement('div');
       showPanelBtn.setAttribute('class', 'poi-widget-show-btn');
@@ -1565,10 +1565,10 @@ var Jawgmaps = {};
       poiContainer.appendChild(poiContent);
       poiPanel.appendChild(poiContainer);
 
-      Jawgmaps._markersWidgetOpen = false;
-      Jawgmaps._toggleMarkersWidgetOpen = function(){
-        Jawgmaps._utils.addClass(Jawgmaps._rootElement, 'markers-' + position);
-        Jawgmaps._utils.addClass(map, 'markers-' + position);
+      Jawg._markersWidgetOpen = false;
+      Jawg._toggleMarkersWidgetOpen = function(){
+        Jawg._utils.addClass(Jawg._rootElement, 'markers-' + position);
+        Jawg._utils.addClass(map, 'markers-' + position);
 
         if (position === 'left') {
           showPanelBtnIcon.setAttribute('class', 'fa fa-chevron-left');
@@ -1580,32 +1580,32 @@ var Jawgmaps = {};
           showPanelBtnIcon.setAttribute('class', 'fa fa-chevron-up');
         }
 
-        if (Jawgmaps._markersWidgetOpen) {
-          Jawgmaps._markersWidgetOpen = false;
+        if (Jawg._markersWidgetOpen) {
+          Jawg._markersWidgetOpen = false;
           poiPanel.setAttribute('class', 'poi-widget-panel' + ' panel-' + position + ' poi-panel-close');
         } else {
-          Jawgmaps._markersWidgetOpen = true;
+          Jawg._markersWidgetOpen = true;
           poiPanel.setAttribute('class', 'poi-widget-panel' + ' panel-' + position + ' poi-panel-open');
 
-          if (Jawgmaps._searchWidgetOpen != null && Jawgmaps._searchWidgetOpen !== undefined) {
-            Jawgmaps._searchWidgetOpen = true;
-            Jawgmaps._toggleSearchWidgetOpen();
+          if (Jawg._searchWidgetOpen != null && Jawg._searchWidgetOpen !== undefined) {
+            Jawg._searchWidgetOpen = true;
+            Jawg._toggleSearchWidgetOpen();
           }
-          if (Jawgmaps._toggleLayerMenu && Jawgmaps._layerMenuOpened) {
-            Jawgmaps._toggleLayerMenu();
+          if (Jawg._toggleLayerMenu && Jawg._layerMenuOpened) {
+            Jawg._toggleLayerMenu();
           }
 
         }
-        setTimeout(function() { Jawgmaps.map.invalidateSize(true) }, 300);
+        setTimeout(function() { Jawg.map.invalidateSize(true) }, 300);
       };
 
-      showPanelBtn.addEventListener('click', Jawgmaps._toggleMarkersWidgetOpen);
-      Jawgmaps._markersWidgetOpen = !Jawgmaps._markersWidgetOpen;
+      showPanelBtn.addEventListener('click', Jawg._toggleMarkersWidgetOpen);
+      Jawg._markersWidgetOpen = !Jawg._markersWidgetOpen;
 
-      Jawgmaps._toggleMarkersWidgetOpen()
+      Jawg._toggleMarkersWidgetOpen()
     };
 
-    Jawgmaps.map.on('moveend', function(){
+    Jawg.map.on('moveend', function(){
       if (mode === 'list') {
         modeList();
       }
@@ -1686,11 +1686,11 @@ var Jawgmaps = {};
 
       // CLICK ON BACK BUTTON
       pointPanBack.addEventListener('click', function(){
-        if (savedZoom < Jawgmaps.map.getZoom()) {
-          Jawgmaps.map.setZoom(savedZoom);
+        if (savedZoom < Jawg.map.getZoom()) {
+          Jawg.map.setZoom(savedZoom);
         }
         if (popup) {
-          Jawgmaps.map.closePopup();
+          Jawg.map.closePopup();
         }
         modeList();
       });
@@ -1701,11 +1701,11 @@ var Jawgmaps = {};
 
     var showList = function() {
 
-      var shownBounds = Jawgmaps.map.getBounds();
+      var shownBounds = Jawg.map.getBounds();
 
       var i = 0;
 
-      Jawgmaps._conf.points.forEach( function(point) {
+      Jawg._conf.points.forEach( function(point) {
         var type = point.typeItem;
 
 
@@ -1742,8 +1742,8 @@ var Jawgmaps = {};
 
             // ADD EVENT ON PANEL BUTTONS
             pointElem.addEventListener('click', function(){
-              savedZoom = Jawgmaps.map.getZoom();
-              Jawgmaps.map.setView(this.point.latLng, Jawgmaps._conf.maxZoom);
+              savedZoom = Jawg.map.getZoom();
+              Jawg.map.setView(this.point.latLng, Jawg._conf.maxZoom);
               point.marker.openPopup();
               selectedPoint = this.point;
 
@@ -1752,8 +1752,8 @@ var Jawgmaps = {};
               pointElem.point.marker.openPopup();
 
               modePoi();
-              if (!Jawgmaps._markersWidgetOpen) {
-                Jawgmaps._toggleMarkersWidgetOpen();
+              if (!Jawg._markersWidgetOpen) {
+                Jawg._toggleMarkersWidgetOpen();
               }
 
             });
@@ -1764,11 +1764,11 @@ var Jawgmaps = {};
 
 
           // ADD EVENT ON MARKERS
-          if (Jawgmaps._conf.markerMenuClickMarker) {
+          if (Jawg._conf.markerMenuClickMarker) {
             point.marker.removeEventListener('click');
             point.marker.on('click', function(){
-              savedZoom = Jawgmaps.map.getZoom();
-              Jawgmaps.map.setView(point.latLngTable, Jawgmaps._conf.maxZoom);
+              savedZoom = Jawg.map.getZoom();
+              Jawg.map.setView(point.latLngTable, Jawg._conf.maxZoom);
               selectedPoint = point;
 
               popup = L.popup().setContent(point.name);
@@ -1776,8 +1776,8 @@ var Jawgmaps = {};
               point.marker.openPopup();
 
               modePoi();
-              if (!Jawgmaps._markersWidgetOpen) {
-                Jawgmaps._toggleMarkersWidgetOpen();
+              if (!Jawg._markersWidgetOpen) {
+                Jawg._toggleMarkersWidgetOpen();
               }
             });
           }
