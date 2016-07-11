@@ -10,6 +10,14 @@ Configuration
 
 This is a specific version of Jawg Widgets preconfigured for Transilien.
 
+Screenshots
+-------------
+
+![Base map widget](/images/jawg4.png)
+![Floors widget](/images/jawg3.png)  
+![Markers-Menu widget](/images/jawg1.png)
+![Markers widget](/images/jawg2.png)
+
 Dependencies
 -------------
 
